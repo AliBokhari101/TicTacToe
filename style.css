@@ -2,14 +2,16 @@
 
 :root {
     --bg: #050505;
-    --surface: rgba(12, 12, 14, 0.85);
+    --surface: rgba(12, 12, 14, 0.88);
     --surface-hover: rgba(255, 255, 255, 0.12);
     --border: #ffffff;
     --border-subtle: rgba(255, 255, 255, 0.3);
     --text-primary: #ffffff;
-    --text-accent: #ffffff;
+    --text-accent: #ff3366;
     --btn-bg: rgba(20, 20, 24, 0.9);
     --shadow-color: #ffffff;
+    --token-p1: #38bdf8;
+    --token-ai: #ff3366;
 }
 
 * {
@@ -29,6 +31,7 @@ body {
     align-items: center;
     overflow-x: hidden;
     position: relative;
+    padding: 20px 0;
 }
 
 /* Subtle dark overlay to maximize text legibility over topographic pattern */
@@ -39,7 +42,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 0;
     pointer-events: none;
 }
@@ -58,7 +61,126 @@ body::before {
     display: none !important;
 }
 
-/* Start Card (Choose Symbol Page) */
+/* ==========================================================================
+   1. PORTAL HOME SCREEN DASHBOARD
+   ========================================================================== */
+.portal-card {
+    background: var(--surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 2px solid var(--border);
+    box-shadow: 8px 8px 0px var(--shadow-color);
+    padding: 40px 28px;
+    width: min(92vw, 420px);
+    text-align: center;
+    transform: rotate(-0.8deg);
+    transition: transform 0.3s ease;
+}
+
+.portal-card:hover {
+    transform: rotate(0deg);
+}
+
+.portal-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    border-bottom: 2px dashed var(--border);
+    padding-bottom: 12px;
+}
+
+.portal-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.75);
+    margin-top: 12px;
+    margin-bottom: 28px;
+}
+
+.game-select-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.game-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--btn-bg);
+    border: 2px solid var(--border);
+    box-shadow: 4px 4px 0px var(--shadow-color);
+    padding: 20px 16px;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+    outline: none;
+}
+
+.game-card:nth-child(1) { transform: rotate(-1.2deg); }
+.game-card:nth-child(2) { transform: rotate(1.2deg); }
+
+.game-card:hover {
+    background: #ffffff;
+    color: #000000;
+    transform: translate(-3px, -3px) rotate(0deg);
+    box-shadow: 7px 7px 0px #ffffff;
+}
+
+.game-card-icon-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.icon-tag {
+    font-size: 2.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.game-card:hover .icon-tag.ttt-x {
+    transform: rotate(-15deg) scale(1.15);
+}
+
+.game-card:hover .icon-tag.ttt-o {
+    transform: rotate(15deg) scale(1.15);
+}
+
+.game-card:hover .icon-tag.snake-icon {
+    transform: translateY(-4px) rotate(-8deg) scale(1.15);
+}
+
+.game-card:hover .icon-tag.ladder-icon {
+    transform: translateY(-4px) rotate(8deg) scale(1.15);
+}
+
+.game-card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+
+.game-card-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+/* ==========================================================================
+   2. TIC TAC TOE: START CARD & BOARD
+   ========================================================================== */
 .start-card {
     background: var(--surface);
     backdrop-filter: blur(16px);
@@ -69,6 +191,9 @@ body::before {
     width: min(90vw, 360px);
     text-align: center;
     transform: rotate(1deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .start-card .title {
@@ -80,6 +205,7 @@ body::before {
     margin-bottom: 8px;
     border-bottom: 2px dashed var(--border);
     padding-bottom: 12px;
+    width: 100%;
 }
 
 .start-card .subtitle {
@@ -87,13 +213,14 @@ body::before {
     letter-spacing: 0.2em;
     color: rgba(255, 255, 255, 0.85);
     margin-top: 16px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .symbol-options {
     display: flex;
     gap: 20px;
     justify-content: center;
+    margin-bottom: 28px;
 }
 
 .symbol-btn {
@@ -111,13 +238,8 @@ body::before {
     transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.symbol-btn[data-symbol="X"] {
-    transform: rotate(-3deg);
-}
-
-.symbol-btn[data-symbol="O"] {
-    transform: rotate(2.5deg);
-}
+.symbol-btn[data-symbol="X"] { transform: rotate(-3deg); }
+.symbol-btn[data-symbol="O"] { transform: rotate(2.5deg); }
 
 .symbol-btn:hover {
     background: #ffffff;
@@ -132,7 +254,12 @@ body::before {
     box-shadow: 1px 1px 0px #ffffff;
 }
 
-/* Game Wrapper & Controls Bar */
+.back-home-btn {
+    margin-top: 8px;
+    transform: rotate(-1deg);
+}
+
+/* Common Controls Bar */
 .game-wrapper {
     display: flex;
     flex-direction: column;
@@ -164,13 +291,8 @@ body::before {
     outline: none;
 }
 
-.back-btn {
-    transform: rotate(-1.5deg);
-}
-
-.restart-btn {
-    transform: rotate(1.5deg);
-}
+.back-btn { transform: rotate(-1.5deg); }
+.restart-btn { transform: rotate(1.5deg); }
 
 .action-btn:hover {
     background: #ffffff;
@@ -185,7 +307,7 @@ body::before {
     box-shadow: 1px 1px 0px #ffffff;
 }
 
-/* Broken / Deconstructed Board Frame */
+/* Tic Tac Toe Board Frame */
 .board {
     position: relative;
     display: grid;
@@ -206,7 +328,6 @@ body::before {
     transform: rotate(0deg);
 }
 
-/* Broken Grid Header */
 .board::before {
     content: 'TIC / TAC / TOE';
     grid-column: 1 / -1;
@@ -222,14 +343,12 @@ body::before {
     padding-bottom: 8px;
 }
 
-/* Grid Item Container Wrapper */
 .board div {
     aspect-ratio: 1;
     display: flex;
     position: relative;
 }
 
-/* Asymmetrical Broken Grid Offsets & Rotations per Tile */
 .board div:nth-child(1) { transform: translate(-3px, -2px) rotate(-1.8deg); }
 .board div:nth-child(2) { transform: translate(2px, 4px) rotate(1.2deg); }
 .board div:nth-child(3) { transform: translate(4px, -3px) rotate(-0.8deg); }
@@ -240,7 +359,6 @@ body::before {
 .board div:nth-child(8) { transform: translate(3px, 2px) rotate(-2deg); }
 .board div:nth-child(9) { transform: translate(4px, -1px) rotate(1.4deg); }
 
-/* Buttons inside the Broken Grid */
 .board div button {
     width: 100%;
     height: 100%;
@@ -274,11 +392,227 @@ body::before {
     box-shadow: 1px 1px 0px #ffffff;
 }
 
-.board div button:focus-visible {
-    outline: 2px dashed #ffffff;
-    outline-offset: 4px;
+/* ==========================================================================
+   3. SNAKES & LADDERS: SCREEN & BOARD
+   ========================================================================== */
+.snakes-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: min(94vw, 440px);
+}
+
+.snakes-status-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+    border: 2px solid var(--border);
+    box-shadow: 4px 4px 0px var(--shadow-color);
+    padding: 10px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    transform: rotate(-0.5deg);
+}
+
+#snakes-turn-indicator {
+    color: #ffffff;
+}
+
+#dice-result-badge {
+    background: #ffffff;
+    color: #000000;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+/* 10x10 Snakes & Ladders Board */
+.snakes-board {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 3px;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 8px;
+    background: var(--surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 2px solid var(--border);
+    box-shadow: 8px 8px 0px var(--shadow-color);
+    transform: rotate(0.5deg);
+}
+
+/* Snake Grid Cell */
+.snake-cell {
+    position: relative;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    user-select: none;
+}
+
+.snake-cell .cell-num {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.45);
+    font-family: 'Space Mono', monospace;
+}
+
+/* Snake Pair Colors */
+.sp-1 { --pair-color: #ff3366; }
+.sp-2 { --pair-color: #ff6b4a; }
+.sp-3 { --pair-color: #e056fd; }
+.sp-4 { --pair-color: #be2ed6; }
+.sp-5 { --pair-color: #ff7979; }
+.sp-6 { --pair-color: #f9ca24; }
+.sp-7 { --pair-color: #eb4d4b; }
+
+/* Ladder Pair Colors */
+.lp-1 { --pair-color: #38bdf8; }
+.lp-2 { --pair-color: #2ed573; }
+.lp-3 { --pair-color: #7bed9f; }
+.lp-4 { --pair-color: #17c0eb; }
+.lp-5 { --pair-color: #fffa65; }
+.lp-6 { --pair-color: #70a1ff; }
+.lp-7 { --pair-color: #55efc4; }
+.lp-8 { --pair-color: #a29bfe; }
+
+/* Pair Colored Indicators */
+.snake-cell.snake-head {
+    background: rgba(255, 51, 102, 0.15);
+    border: 2px solid var(--pair-color);
+    box-shadow: inset 0 0 6px var(--pair-color);
+}
+
+.snake-cell.snake-head::after {
+    content: '🐍';
+    font-size: 0.75rem;
+}
+
+.snake-cell.snake-tail {
+    border: 2px dashed var(--pair-color);
+}
+
+.snake-cell.snake-tail::after {
+    content: '🔻';
+    font-size: 0.65rem;
+    opacity: 0.9;
+}
+
+.snake-cell.ladder-bottom {
+    background: rgba(56, 189, 248, 0.15);
+    border: 2px solid var(--pair-color);
+    box-shadow: inset 0 0 6px var(--pair-color);
+}
+
+.snake-cell.ladder-bottom::after {
+    content: '🪜';
+    font-size: 0.75rem;
+}
+
+.snake-cell.ladder-top {
+    border: 2px dashed var(--pair-color);
+}
+
+.snake-cell.ladder-top::after {
+    content: '🔺';
+    font-size: 0.65rem;
+    opacity: 0.9;
 }
 
 
 
-
+
+/* Player & AI Tokens on Board */
+.tokens-container {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 6px;
+    z-index: 2;
+}
+
+.player-token,
+.ai-token {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    font-size: 0.55rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+.player-token {
+    background: var(--token-p1);
+    color: #000000;
+    border: 1px solid #ffffff;
+}
+
+.ai-token {
+    background: var(--token-ai);
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+/* Dice Controller */
+.dice-controller {
+    margin-top: 6px;
+}
+
+.roll-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #000000;
+    background: #ffffff;
+    border: 2px solid #ffffff;
+    box-shadow: 5px 5px 0px var(--text-accent);
+    padding: 14px 32px;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+    outline: none;
+    transform: rotate(-1deg);
+}
+
+.roll-btn:hover {
+    background: var(--text-accent);
+    color: #ffffff;
+    border-color: #ffffff;
+    transform: translate(-3px, -3px) rotate(0deg);
+    box-shadow: 7px 7px 0px #ffffff;
+}
+
+.roll-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px #ffffff;
+}
+
+.roll-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+
+
+
+

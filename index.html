@@ -10,8 +10,35 @@
 
 <body>
 
-    <!-- Symbol Selection Start Screen -->
-    <div id="start-screen" class="screen">
+    <!--Main Home Screen-->
+    <div id="home-screen" class="screen">
+        <div class="portal-card">
+            <h1 class="portal-title">GAMES</h1>
+            <p class="portal-subtitle">SELECT THE GAME YOU WANT TO PLAY</p>
+            <div class="game-select-grid">
+                <button id="nav-ttt-btn" class="game-card">
+                    <div class="game-card-icon-group">
+                        <span class="icon-tag ttt-x">❌</span>
+                        <span class="icon-tag ttt-o">⭕</span>
+                    </div>
+                    <span class="game-card-title">TIC TAC TOE</span>
+                    <span class="game-card-desc">3x3 Grid Strategy</span>
+                </button>
+                <button id="nav-snakes-btn" class="game-card">
+                    <div class="game-card-icon-group">
+                        <span class="icon-tag snake-icon">🐍</span>
+                        <span class="icon-tag ladder-icon">🪜</span>
+                    </div>
+                    <span class="game-card-title">SNAKES & LADDERS</span>
+                    <span class="game-card-desc">100-Cell Board Race</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TIC TAC Start Screen -->
+    <div id="start-screen" class="screen hidden">
         <div class="start-card">
             <h1 class="title">TIC / TAC / TOE</h1>
             <p class="subtitle">SELECT YOUR SYMBOL</p>
@@ -19,14 +46,15 @@
                 <button class="symbol-btn" data-symbol="X">X</button>
                 <button class="symbol-btn" data-symbol="O">O</button>
             </div>
+            <button id="ttt-home-btn" class="action-btn back-home-btn">← HOME</button>
         </div>
     </div>
 
-    <!-- Game Screen -->
+    <!-- TIC TAC Game Screen -->
     <div id="game-screen" class="screen hidden">
         <div class="game-wrapper">
             <div class="controls-bar">
-                <button id="back-btn"class="action-btn back-btn">← BACK</button>
+                <button id="back-btn" class="action-btn back-btn">← BACK</button>
                 <button id="restart-btn" class="action-btn restart-btn">RESTART ↺</button>
             </div>
             <div class="board">
@@ -43,9 +71,33 @@
         </div>
     </div>
 
+    <!-- Snakes Game Screen -->
+    <div id="snakes-game-screen" class="screen hidden">
+        <div class="snakes-wrapper">
+
+            <div class="controls-bar">
+                <button id="snakes-back-btn" class="action-btn back-btn">← BACK</button>
+                <button id="snakes-restart-btn" class="action-btn restart-btn">RESTART ↺</button>
+            </div>
+
+            <!-- Status Display -->
+            <div class="snakes-status-card">
+                <span id="snakes-turn-indicator">YOUR TURN</span>
+                <span id="dice-result-badge">DICE: -</span>
+            </div>
+
+            <div id="snakes-board" class="snakes-board"></div> <!--SNAKE GAME BOARD-->
+
+            <!--Dice Controller -->
+            <div class="dice-controller">
+                <button id="roll-dice-btn" class="roll-btn">ROLL DICE 🎲</button>
+            </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="app.js"></script>
+    <script src="snakes.js"></script>
 </body>
 
 </html>
