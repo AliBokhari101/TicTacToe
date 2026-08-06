@@ -4,6 +4,7 @@ let boardState = ['', '', '', '', '', '', '', '', ''];
 let gameActive = true;
 let currentPlayer = 'X';
 
+
 //SCREEN ELEMENTS
 const homeScreen = document.getElementById('home-screen');
 const startScreen = document.getElementById('start-screen');
@@ -20,6 +21,18 @@ const restartBtn = document.querySelector('.restart-btn');
 const navTttBtn = document.getElementById('nav-ttt-btn');
 const navSnakesBtn = document.getElementById('nav-snakes-btn');
 const tttHomeBtn = document.getElementById('ttt-home-btn');
+
+//SoundEffects
+
+const sounds={
+    jump: new Audio('sounds/jump-sound.mp3'),
+    victory:new Audio('sounds/victory-sound.mp3')
+};
+
+function playsound(audio){
+    audio.currentTime=0;
+    audio.play().catch(function(){});
+}
 
 
 const winningCombos = [
@@ -93,11 +106,13 @@ cells.forEach((cell, index) => {
         if (!gameActive || cell.textContent !== '' || currentPlayer == aiSymbol) {
             return;
         }
+        playsound(sounds.jump);
         boardState[index] = currentPlayer;
         cell.textContent = currentPlayer;
 
         if (checkwin()) {
             gameActive = false;
+            playsound(sounds.victory);
             Swal.fire({
                 title: `${currentPlayer} wins!`,
                 icon: 'success',
@@ -172,6 +187,7 @@ function aiMove() {
 
     if (checkwin()) {
         gameActive = false;
+        playsound(sounds.victory);
         Swal.fire({
             title: `${aiSymbol} wins!`,
             icon: 'success',

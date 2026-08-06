@@ -400,7 +400,7 @@ body::before {
     flex-direction: column;
     align-items: center;
     gap: 14px;
-    width: min(94vw, 440px);
+    width: min(94vw, 580px);
 }
 
 .snakes-status-card {
@@ -436,10 +436,10 @@ body::before {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
-    gap: 3px;
+    gap: 5px;
     width: 100%;
-    aspect-ratio: 1;
-    padding: 8px;
+    aspect-ratio: 1.08;
+    padding: 10px;
     background: var(--surface);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -448,7 +448,7 @@ body::before {
     transform: rotate(0.5deg);
 }
 
-/* Snake Grid Cell */
+/* Snake Grid Cell Internal Layout */
 .snake-cell {
     position: relative;
     background: rgba(255, 255, 255, 0.04);
@@ -456,18 +456,20 @@ body::before {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    padding-bottom: 5px;
     overflow: hidden;
     user-select: none;
 }
 
+/* Tile Number on Top-Left */
 .snake-cell .cell-num {
     position: absolute;
-    top: 2px;
-    left: 3px;
-    font-size: 0.55rem;
+    top: 3px;
+    left: 5px;
+    font-size: 0.65rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.6);
     font-family: 'Space Mono', monospace;
 }
 
@@ -497,19 +499,8 @@ body::before {
     box-shadow: inset 0 0 6px var(--pair-color);
 }
 
-.snake-cell.snake-head::after {
-    content: '🐍';
-    font-size: 0.75rem;
-}
-
 .snake-cell.snake-tail {
     border: 2px dashed var(--pair-color);
-}
-
-.snake-cell.snake-tail::after {
-    content: '🔻';
-    font-size: 0.65rem;
-    opacity: 0.9;
 }
 
 .snake-cell.ladder-bottom {
@@ -518,62 +509,78 @@ body::before {
     box-shadow: inset 0 0 6px var(--pair-color);
 }
 
-.snake-cell.ladder-bottom::after {
-    content: '🪜';
-    font-size: 0.75rem;
-}
-
 .snake-cell.ladder-top {
     border: 2px dashed var(--pair-color);
 }
 
+/* Snake & Ladder Icons Fixed on Top-Right */
+.snake-cell.snake-head::after,
+.snake-cell.snake-tail::after,
+.snake-cell.ladder-bottom::after,
 .snake-cell.ladder-top::after {
-    content: '🔺';
-    font-size: 0.65rem;
-    opacity: 0.9;
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 0.85rem;
+    z-index: 1;
 }
 
+.snake-cell.snake-head::after { content: '🐍'; }
+.snake-cell.snake-tail::after { content: '🔻'; opacity: 0.9; }
+.snake-cell.ladder-bottom::after { content: '🪜'; }
+.snake-cell.ladder-top::after { content: '🔺'; opacity: 0.9; }
 
-
-
-/* Player & AI Tokens on Board */
+/* Player & AI Tokens Container (Side-by-Side without Clipping) */
 .tokens-container {
     display: flex;
-    gap: 2px;
+    gap: 4px;
     align-items: center;
     justify-content: center;
-    margin-top: 6px;
+    width: 100%;
     z-index: 2;
 }
 
 .player-token,
 .ai-token {
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    font-size: 0.55rem;
+    font-size: 0.65rem;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
 }
 
 .player-token {
     background: var(--token-p1);
     color: #000000;
-    border: 1px solid #ffffff;
+    border: 2px solid #ffffff;
+    animation: pulseP1 1.8s infinite ease-in-out;
 }
 
 .ai-token {
     background: var(--token-ai);
     color: #ffffff;
-    border: 1px solid #ffffff;
+    border: 2px solid #ffffff;
 }
 
-/* Dice Controller */
+/* Turn Glow Animation */
+@keyframes pulseP1 {
+    0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+}
+
+/* Dice Controller & Roll Button */
 .dice-controller {
     margin-top: 6px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .roll-btn {
@@ -585,11 +592,13 @@ body::before {
     background: #ffffff;
     border: 2px solid #ffffff;
     box-shadow: 5px 5px 0px var(--text-accent);
-    padding: 14px 32px;
+    padding: 14px 28px;
     cursor: pointer;
     transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
     outline: none;
     transform: rotate(-1deg);
+    width: 100%;
+    text-align: center;
 }
 
 .roll-btn:hover {
@@ -613,6 +622,50 @@ body::before {
 }
 
 
+/* Desktop Side-by-Side Zero-Scroll Layout */
+@media (min-width: 768px) {
 
+    .snakes-wrapper {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        width: auto;
+        max-height: 92vh;
+    }
 
+    .snakes-board-container {
+        width: min(85vw, 680px);
+        height: auto;
+    }
 
+    .snakes-board {
+        height: 100%;
+        width: 100%;
+    }
+
+    .snakes-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 220px;
+    }
+
+    .snakes-status-card {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+        padding: 16px;
+    }
+
+    .controls-bar {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .action-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

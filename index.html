@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe</title>
+    <title>XO WARS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -75,23 +75,32 @@
     <div id="snakes-game-screen" class="screen hidden">
         <div class="snakes-wrapper">
 
-            <div class="controls-bar">
-                <button id="snakes-back-btn" class="action-btn back-btn">← BACK</button>
-                <button id="snakes-restart-btn" class="action-btn restart-btn">RESTART ↺</button>
+            <!-- Left Panel: Board Container -->
+            <div class="snakes-board-container">
+                <div id="snakes-board" class="snakes-board"></div>
             </div>
 
-            <!-- Status Display -->
-            <div class="snakes-status-card">
-                <span id="snakes-turn-indicator">YOUR TURN</span>
-                <span id="dice-result-badge">DICE: -</span>
+            <!-- Right Panel: Sidebar Control Panel -->
+            <div class="snakes-sidebar">
+                <!-- Status Display -->
+                <div class="snakes-status-card">
+                    <span id="snakes-turn-indicator">YOUR TURN</span>
+                    <span id="dice-result-badge">DICE: -</span>
+                </div>
+
+                <!-- Dice Controller -->
+                <div class="dice-controller">
+                    <button id="roll-dice-btn" class="roll-btn">ROLL DICE 🎲</button>
+                </div>
+
+                <!-- Controls Bar -->
+                <div class="controls-bar">
+                    <button id="snakes-back-btn" class="action-btn back-btn">← BACK</button>
+                    <button id="snakes-restart-btn" class="action-btn restart-btn">RESTART ↺</button>
+                </div>
             </div>
 
-            <div id="snakes-board" class="snakes-board"></div> <!--SNAKE GAME BOARD-->
-
-            <!--Dice Controller -->
-            <div class="dice-controller">
-                <button id="roll-dice-btn" class="roll-btn">ROLL DICE 🎲</button>
-            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

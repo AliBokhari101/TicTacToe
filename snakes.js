@@ -1,4 +1,4 @@
-// Snake Pairs (Head ➔ Tail)
+//snakes
 const SNAKE_PAIRS = [
     { head: 98, tail: 78 },
     { head: 95, tail: 75 },
@@ -9,10 +9,10 @@ const SNAKE_PAIRS = [
     { head: 16, tail: 6 }
 ];
 
-// Ladder Pairs (Bottom ➔ Top)
+//ladders
 const LADDER_PAIRS = [
-    { bottom: 4,  top: 14 },
-    { bottom: 9,  top: 31 },
+    { bottom: 4, top: 14 },
+    { bottom: 9, top: 31 },
     { bottom: 20, top: 38 },
     { bottom: 28, top: 84 },
     { bottom: 40, top: 59 },
@@ -20,6 +20,24 @@ const LADDER_PAIRS = [
     { bottom: 63, top: 81 },
     { bottom: 71, top: 91 }
 ];
+
+//Dice faces
+const DICE_FACES = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+//soundeffects and function
+const snakesounds = {
+    diceRoll: new Audio('sounds/dice_roll-sound.mp3'),
+    movement: new Audio('sounds/piece_move-sound.mp3'),
+    ladder: new Audio('sounds/ladder_climb-sound.mp3'),
+    snake: new Audio('sounds/snake_bite-sound.mp3'),
+    victory: new Audio('sounds/victory-sound.mp3'),
+    jump:new Audio('sounds/jump-sound')
+}
+
+function playsound(audio) {
+    audio.currentTime = 0;
+    audio.play().catch(function () { });
+}
 
 // Lookup objects for move validation
 const snake = {};
@@ -34,7 +52,7 @@ let aiPosition = 1;
 let playerTurn = true;
 let isRolling = false;
 
-// DOM Elements
+// DOM 
 const snakeBoard = document.getElementById('snakes-board');
 const rollDiceBtn = document.getElementById('roll-dice-btn');
 const snakesBackBtn = document.getElementById('snakes-back-btn');
@@ -69,7 +87,7 @@ function createBoard() {
             numLabel.textContent = num;
             cellDiv.appendChild(numLabel);
 
-            // Assign unique color pair classes for Snakes
+            // unique colors for Snakes
             SNAKE_PAIRS.forEach((p, idx) => {
                 if (num === p.head) {
                     cellDiv.classList.add('snake-head', `sp-${idx + 1}`);
@@ -78,7 +96,7 @@ function createBoard() {
                 }
             });
 
-            // Assign unique color pair classes for Ladders
+            // unique colors for ladders
             LADDER_PAIRS.forEach((p, idx) => {
                 if (num === p.bottom) {
                     cellDiv.classList.add('ladder-bottom', `lp-${idx + 1}`);
@@ -120,28 +138,58 @@ function renderTokens() {
     }
 }
 
+//delay function for smooth animations
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+//GAMEPLAY LOGIC:
 // DICE AND PLAYER TURN LOGIC
-rollDiceBtn.addEventListener('click', () => {
+rollDiceBtn.addEventListener('click', async () => {
     if (isRolling || !playerTurn) return;
 
     isRolling = true;
     rollDiceBtn.disabled = true;
+    
+    playsound(snakesounds.diceRoll);
+
+    for (let shuffle = 0; shuffle < 8; shuffle++) {
+        const randomFace = DICE_FACES[Math.floor(Math.random() * DICE_FACES.length)];
+        diceResult.textContent = `DICE: ${randomFace}`;
+        await sleep(100);
+    }
 
     const dice = Math.floor(Math.random() * 6) + 1;
-    diceResult.textContent = `DICE: ${dice}`;
+    diceResult.textContent = `DICE: ${dice} ${DICE_FACES[dice - 1]}`;
 
-    if (playerPosition + dice <= 100) {
-        playerPosition += dice;
+    const targetPos = playerPosition + dice;
+
+
+
+    //Walk tile-by-tile forward
+    if (targetPos <= 100) {
+        for (let i = 0; i < dice; i++) {
+            playerPosition++;
+            renderTokens();
+            playsound(snakesounds.movement);
+            await sleep(180);
+        }
+
+        //Check for Snake slide or Ladder climb 
         if (snake[playerPosition]) {
+            await sleep(300);
+            playsound(snakesounds.snake);
             playerPosition = snake[playerPosition];
+            renderTokens();
         } else if (ladders[playerPosition]) {
+            await sleep(300);
+            playsound(snakesounds.ladder);
             playerPosition = ladders[playerPosition];
+            renderTokens();
         }
     }
 
-    renderTokens();
-
+    //Check Win
     if (playerPosition === 100) {
+        playsound(snakesounds.victory);
         Swal.fire({
             title: 'You Won Snakes & Ladders! 🏆',
             icon: 'success',
@@ -150,26 +198,48 @@ rollDiceBtn.addEventListener('click', () => {
         return;
     }
 
+    //Pass turn to AI
     playerTurn = false;
     turnIndicator.textContent = 'AI THINKING...';
-    setTimeout(handleAiTurn, 1500);
+    setTimeout(handleAiTurn, 1000);
 });
 
 // AI LOGIC
-function handleAiTurn() {
+async function handleAiTurn() {
+    playsound(snakesounds.diceRoll);
+    for (let shuffle = 0; shuffle < 8; shuffle++) {
+        const randomFace = DICE_FACES[Math.floor(Math.random() * DICE_FACES.length)];
+        diceResult.textContent = `DICE: ${randomFace}`;
+        await sleep(100);
+    }
+
     const dice = Math.floor(Math.random() * 6) + 1;
-    diceResult.textContent = `DICE: ${dice}`;
+    diceResult.textContent = `DICE: ${dice} ${DICE_FACES[dice - 1]}`;
 
-    if (aiPosition + dice <= 100) {
-        aiPosition += dice;
+    const targetPos = aiPosition + dice;
 
+    // Walk AI tile-by-tile 
+    if (targetPos <= 100) {
+        for (let i = 0; i < dice; i++) {
+            aiPosition++;
+            renderTokens();
+            playsound(snakesounds.movement);
+            await sleep(180);
+        }
+
+        //Check for Snake slide or Ladder climb
         if (snake[aiPosition]) {
+            await sleep(300);
+            playsound(snakesounds.snake);
             aiPosition = snake[aiPosition];
+            renderTokens();
         } else if (ladders[aiPosition]) {
+            await sleep(300);
+            playsound(snakesounds.ladder);
             aiPosition = ladders[aiPosition];
+            renderTokens();
         }
     }
-    renderTokens();
 
     if (aiPosition === 100) {
         Swal.fire({
@@ -186,7 +256,9 @@ function handleAiTurn() {
     turnIndicator.textContent = 'YOUR TURN';
 }
 
+
 function resetSnakesGame() {
+    playsound(snakesounds.jump);
     playerPosition = 1;
     aiPosition = 1;
     playerTurn = true;
@@ -205,7 +277,6 @@ snakesBackBtn.addEventListener('click', () => {
     document.getElementById('home-screen').classList.remove('hidden');
 });
 
-// Initialize Board on Load
 createBoard();
 
-
+
